@@ -82,13 +82,49 @@ jobs:
       -
         # this will build the images, once per platform,
         # then push to both Docker Hub and GHCR
-        name: Build and push
+        name: Docker Build
         id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          platforms: linux/amd64
+          builder: ${{ steps.buildx.outputs.name }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          push: false
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+          load: true
+
+      - 
+        name: Run Snyk to check Docker image for vulnerabilities
+        # Snyk can be used to break the build when it detects vulnerabilities.
+        # In this case we want to upload the issues to GitHub Code Scanning
+        continue-on-error: true
+        uses: snyk/actions/docker@master
+        env:
+          # In order to use the Snyk Action you will need to have a Snyk API token.
+          # More details in https://github.com/snyk/actions#getting-your-snyk-token
+          # or you can signup for free at https://snyk.io/login
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: bretfisher/docker-github-actions-example
+          args: --file=Dockerfile
+      - 
+        name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: snyk.sarif
+
+      -
+        # this will build the images, once per platform,
+        # then push to both Docker Hub and GHCR
+        name: Docker Build and Push
+        id: docker_build_and_push
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           builder: ${{ steps.buildx.outputs.name }}
-          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-from: type=local,src=/tmp/.buildx-cache-new
           cache-to: type=local,dest=/tmp/.buildx-cache-new
           # don't push during a pull_request, only build
           push: ${{ github.event_name != 'pull_request' }}
@@ -104,4 +140,4 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
       -
         name: Show image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+        run: echo ${{ steps.docker_build_and_push.outputs.digest }}
