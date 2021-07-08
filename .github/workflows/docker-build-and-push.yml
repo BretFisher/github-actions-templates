@@ -80,8 +80,7 @@ jobs:
           tags: |
             type=raw,value=latest
       -
-        # this will build the images, once per platform,
-        # then push to both Docker Hub and GHCR
+        # this will build the amd64 image
         name: Docker Build
         id: docker_build
         uses: docker/build-push-action@v2
@@ -97,10 +96,11 @@ jobs:
 
       - 
         name: Run Snyk to check Docker image for vulnerabilities
+        # https://github.com/snyk/actions/tree/master/docker
+        uses: snyk/actions/docker@0.3.0
         # Snyk can be used to break the build when it detects vulnerabilities.
         # In this case we want to upload the issues to GitHub Code Scanning
         continue-on-error: true
-        uses: snyk/actions/docker@master
         env:
           # In order to use the Snyk Action you will need to have a Snyk API token.
           # More details in https://github.com/snyk/actions#getting-your-snyk-token
@@ -108,7 +108,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           image: bretfisher/docker-github-actions-example
-          args: --file=Dockerfile
+          args: --file=Dockerfile --severity-threshold=high
       - 
         name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v1
