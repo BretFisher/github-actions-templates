@@ -9,4 +9,4 @@ on:
 
 jobs:
   call-super-linter:
-    uses: bretfisher/super-linter-example/.github/workflows/super-linter.yaml@main
+    uses: bretfisher/super-linter-workflow/.github/workflows/super-linter.yaml@main
