@@ -62,8 +62,8 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            bretfisher/github-actions-templates
-            ghcr.io/bretfisher/github-actions-templates
+            ${{ github.repository }}
+            ghcr.io/${{ github.repository }}
           flavor: |
             latest=false
           tags: |
@@ -72,14 +72,14 @@ jobs:
       -
         # this will build the images, once per platform,
         # then push to both Docker Hub and GHCR
-        # it uses github cache API for faster builds:
-        # https://github.com/crazy-max/docker-build-push-action/blob/master/docs/advanced/cache.md#cache-backend-api
         name: Docker Build and Push
         id: docker_build_and_push
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           builder: ${{ steps.buildx.outputs.name }}
+          # it uses github cache API for faster builds:
+          # https://github.com/crazy-max/docker-build-push-action/blob/master/docs/advanced/cache.md#cache-backend-api
           cache-from: type=gha
           cache-to: type=gha,mode=max
           # for an approved pull_request, only push pr-specific tags
