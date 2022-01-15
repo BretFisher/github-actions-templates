@@ -73,8 +73,8 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            bretfisher/docker-github-actions-example
-            ghcr.io/bretfisher/docker-github-actions-example
+            bretfisher/github-actions-templates
+            ghcr.io/bretfisher/github-actions-templates
           flavor: |
             latest=false
           tags: |
@@ -107,7 +107,7 @@ jobs:
           # or you can signup for free at https://snyk.io/login
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: bretfisher/docker-github-actions-example
+          image: bretfisher/github-actions-templates
           args: --file=Dockerfile --severity-threshold=high
       - 
         name: Upload result to GitHub Code Scanning
