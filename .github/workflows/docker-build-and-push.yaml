@@ -31,6 +31,7 @@ on:
         description: Docker Hub username
         required: true
         type: string
+        default: bretfisher
       image-names:
         description: A list of the account/repo names for docker build
         required: false
