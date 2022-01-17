@@ -29,7 +29,7 @@ on:
     inputs:
       dockerhub-username:
         description: Docker Hub username
-        required: true
+        required: false
         type: string
         default: bretfisher
       image-names:
