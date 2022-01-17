@@ -35,7 +35,6 @@ on:
       dockerhub-token:
         description: Docker Hub token
         required: true
-        type: string
 
 
 jobs:
