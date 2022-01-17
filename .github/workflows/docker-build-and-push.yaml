@@ -24,6 +24,8 @@ on:
     - cron: '0 12 15 * *'
   workflow_dispatch:
     # run whenever we want!
+  workflow_call:
+    # allow reuse of this workflow in other repos
 
 jobs:
   build-and-push-images:
