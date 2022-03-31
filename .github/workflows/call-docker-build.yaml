@@ -40,8 +40,6 @@ jobs:
 
     with:
       
-      runs-on: ubuntu-latest
-      
       ### REQUIRED
       ### ENABLE ONE OR BOTH REGISTRIES
       ### tell docker where to push.
