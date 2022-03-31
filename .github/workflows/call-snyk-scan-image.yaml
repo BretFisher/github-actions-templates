@@ -39,7 +39,7 @@ jobs:
       
       ### REQUIRED
       ### image to scan
-      image: 'ghcr.io/${{ github.repository }}:${{ github.sha }}'
+      image: 'ghcr.io/${{ github.repository }}'
 
       ### defaults to true, which doesn't fail job if CVEs are found
       ### set to false to fail (blocking) if CVEs (of your severities) are found

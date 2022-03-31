@@ -14,7 +14,7 @@ I name workflows depending on how they are used:
 
 This repository is part of a group of my samples on GitHub Actions:
 
-* (you are here) [bretfisher/github-actions-templates](https://github.com/BretFisher/github-actions-templates) - Main repo
+* (you are here) [bretfisher/github-actions-templates](https://github.com/BretFisher/github-actions-templates) - Main repository
 * [bretfisher/super-linter-workflow](https://github.com/BretFisher/super-linter-workflow) - Reusable linter workflow
 * [bretfisher/docker-build-workflow](https://github.com/BretFisher/docker-build-workflow)- Reusable docker build workflow
 * [bretfisher/allhands22](https://github.com/BretFisher/github-actions-templates) - Step by step example of a Docker workflow

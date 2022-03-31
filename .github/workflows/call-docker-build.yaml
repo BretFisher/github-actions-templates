@@ -42,26 +42,27 @@ jobs:
       
       runs-on: ubuntu-latest
       
+      ### REQUIRED
       ### ENABLE ONE OR BOTH REGISTRIES
       ### tell docker where to push.
       ### NOTE if Docker Hub is set to true, you must set secrets above and also add account/repo/tags below
-      #dockerhub-enable: true
-      #ghcr-enable: true
+      dockerhub-enable: false
+      ghcr-enable: true
 
-      ### REQUIRED A list of the account/repo names for docker build. Defaults only to ghcr.io
-      ### also add quay and harbor image names if they are enabled above
+      ### REQUIRED 
+      ### A list of the account/repo names for docker build. List should match what's enabled above
       ### defaults to:
-      #image-names: |
-      #  ghcr.io/${{ github.repository }}
+      image-names: |
+        ghcr.io/${{ github.repository }}
 
       ### REQUIRED set rules for tagging images, based on special action syntax:
       ### https://github.com/docker/metadata-action#tags-input
       ### defaults to:
-      # image-tags: |
-      #   type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
-      #   type=ref,event=pr
-      #   type=ref,event=branch
-      #   type=semver,pattern={{version}}
+      tag-rules: |
+        type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+        type=ref,event=pr
+        type=ref,event=branch
+        type=semver,pattern={{version}}
       
       ### path to where docker should copy files into image
       ### defaults to root of repository (.)
@@ -74,7 +75,7 @@ jobs:
       # target:
       
       ### platforms to build for, defaults to linux/amd64
-      # other options: linux/amd64,linux/arm64,linux/arm/v7
-      #platforms: linux/amd64
+      ### other options: linux/amd64,linux/arm64,linux/arm/v7
+      # platforms: linux/amd64
       
       
