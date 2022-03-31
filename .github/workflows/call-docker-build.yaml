@@ -10,8 +10,6 @@ on:
     paths-ignore:
       - 'README.md'
       - '.github/linters/**'
-    # never run on tag pushes
-    tags-ignore: ["**"]
   pull_request:
     # don't rebuild image if someone only edited unrelated files
     paths-ignore:
@@ -76,4 +74,6 @@ jobs:
       ### other options: linux/amd64,linux/arm64,linux/arm/v7
       # platforms: linux/amd64
       
-      
+      ### Create a PR comment with image tags and labels
+      ### defaults to false
+      # comment-enable: false
