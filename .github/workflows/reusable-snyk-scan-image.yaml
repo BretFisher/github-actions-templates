@@ -1,0 +1,85 @@
+---
+name: Snyk Scan Image
+
+on:
+  workflow_call:
+  
+    inputs:
+      image:
+        # 'ghcr.io/${{ github.repository }}:${{ github.sha }}'
+        description: Image to scan
+        required: true
+        type: string
+      continue-on-error:
+        description: false if you want job to fail when CVEs are found
+        required: false
+        type: boolean
+        default: true
+      severity:
+        description: --severity-threshold=<low|medium|high|critical>
+        required: false
+        type: string
+        default: --severity-threshold=high
+      dockerfile:
+        description: Dockerfile location, for best results. Set to '' to disable.
+        required: false
+        type: string
+        default: --file=Dockerfile
+      app-vulns:
+        description: Scan app dependencies as well. Set to '' to disable.
+        required: false
+        type: string
+        default: --app-vulns
+      upload-results:
+        description: Upload scan results to GitHub Security tab
+        required: false
+        type: boolean
+        default: false
+    
+    secrets:
+      registry-username:
+        description: Username for registry
+        required: true
+      registry-password:
+        description: Password for registry
+        required: true
+      snyk-token:
+        description: Snyk API token
+        required: true
+
+jobs:
+  build:
+    name: CVE Image Scan
+
+    runs-on: ubuntu-latest
+
+    permissions: read-all
+
+    steps:
+      
+      - name: Which image are we scanning?
+        run: |
+          echo "Image to scan: ${{ inputs.image-ref }}"
+
+      - name: Checkout git repo
+        uses: actions/checkout@v3
+
+      - name: Run Snyk to check Docker image for vulnerabilities
+        # Snyk can be used to break the build when it detects vulnerabilities.
+        # In this case we want to upload the issues to GitHub Code Scanning
+        continue-on-error: ${{ inputs.continue-on-error }}
+        uses: snyk/actions/docker@master
+        env:
+          # In order to use the Snyk Action you will need to have a Snyk API token.
+          # More details in https://github.com/snyk/actions#getting-your-snyk-token
+          # or you can signup for free at https://snyk.io/login
+          SNYK_TOKEN: ${{ inputs.snyk-token }}
+        with:
+          image: ${{ inputs.image }}
+          args: ${{ inputs.severity }} ${{ inputs.dockerfile }} ${{ inputs.app-vulns }} --username=${{ inputs.registry-username }} --password=${{ inputs.registry-password }}
+      - 
+        name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v1
+        if: always() && inputs.upload-results
+        with:
+          sarif_file: snyk.sarif
