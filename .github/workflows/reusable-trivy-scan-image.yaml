@@ -1,0 +1,73 @@
+---
+name: Trivy Scan Image
+
+on:
+  workflow_call:
+  
+    inputs:
+      image-ref:
+        # 'ghcr.io/${{ github.repository }}:${{ github.sha }}'
+        description: Image to scan
+        required: true
+        type: string
+      exit-code:
+        description: 1 if you want job to fail when CVEs are found
+        required: false
+        type: string
+        default: '0'
+      severity:
+        description: Comma delimited list of severities to scan for UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+        required: false
+        type: string
+        default: 'HIGH,CRITICAL'
+      ignore-unfixed:
+        description: Ignore unpatched/unfixed vulnerabilities
+        required: false
+        type: boolean
+        default: true
+    
+    secrets:
+      registry-username:
+        description: Username for registry
+        required: true
+      registry-password:
+        description: Password for registry
+        required: true
+
+jobs:
+  build:
+    name: CVE Image Scan
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: none
+      checks: none
+      contents: none
+      deployments: none
+      issues: none
+      packages: none
+      pull-requests: none
+      repository-projects: none
+      security-events: none
+      statuses: none
+
+    steps:
+      
+      - name: Which image are we scanning?
+        run: |
+          echo "Image to scan: ${{ inputs.image-ref }}"
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.2.2
+        with:
+          image-ref: ${{ inputs.image-ref }}
+          format: table # table, json, sarif
+          exit-code: ${{ inputs.exit-code }} # 1 or 0. 0 means don't fail the job if issues are found
+          ignore-unfixed: ${{ inputs.ignore-unfixed }} # Ignore unpatched/unfixed vulnerabilities
+          vuln-type: 'os,library'
+          severity: ${{ inputs.severity }} # UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+          timeout: 10m0s
+        env:
+          TRIVY_USERNAME: ${{ secrets.registry-username }}
+          TRIVY_PASSWORD: ${{ secrets.registry-password }}
