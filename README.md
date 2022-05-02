@@ -1,6 +1,7 @@
 # Docker GitHub Actions DevOps Examples
 
 [![Lint Code Base](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-super-linter.yaml/badge.svg)](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-super-linter.yaml)
+[![Docker Build](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-docker-build.yaml/badge.svg)](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-docker-build.yaml)
 
 See this repositories [`.github`](.github) directory for examples on linters, workflows, and dependabot.
 
@@ -27,6 +28,7 @@ I name workflows depending on how they are used:
 - [bretfisher/super-linter-workflow](https://github.com/BretFisher/super-linter-workflow) - Reusable linter workflow
 - [bretfisher/docker-build-workflow](https://github.com/BretFisher/docker-build-workflow)- Reusable docker build workflow
 - [bretfisher/allhands22](https://github.com/BretFisher/github-actions-templates) - Step by step example of a Docker workflow
+- [My full list of container examples and tools](https://github.com/bretfisher)
 
 ## More reading
 
