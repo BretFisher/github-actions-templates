@@ -1,4 +1,5 @@
 ---
+# template source: https://github.com/bretfisher/super-linter-workflow/blob/main/templates/call-super-linter.yaml
 name: Lint Code Base
 
 on:
