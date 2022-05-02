@@ -20,7 +20,7 @@ jobs:
     ### you can also call workflows from inside the same repo via file path
     
     #FIXME: customize uri to point to your own linter repository
-    uses: bretfisher/github-actions-templates/.github/workflows/reusable-snyk-scan-image.yaml@prep-for-talk
+    uses: bretfisher/github-actions-templates/.github/workflows/reusable-snyk-scan-image.yaml@main
 
     secrets:
     
