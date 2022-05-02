@@ -26,8 +26,8 @@ jobs:
     
       ### REQUIRED
       ### registry auth
-      registry-username: ${{ secrets.DOCKERHUB_USERNAME }}
-      registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+      registry-username: ${{ github.actor }}
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
 
       ### REQUIRED
       ### In order to use the Snyk Action you will need to have a Snyk API token.
