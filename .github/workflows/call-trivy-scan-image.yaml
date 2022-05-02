@@ -32,7 +32,7 @@ jobs:
       
       ### REQUIRED
       ### image to scan
-      image: 'ghcr.io/${{ github.repository }}'
+      image: 'ghcr.io/bretfisher/github-actions-templates:latest'
 
       ### defaults to 0, which doesn't fail job if CVEs are found
       ### set to 1 to fail (blocking) if CVEs (of your severities) are found

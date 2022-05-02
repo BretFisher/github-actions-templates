@@ -65,10 +65,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Snyk to check Docker image for vulnerabilities
+        uses: snyk/actions/docker@master
         # Snyk can be used to break the build when it detects vulnerabilities.
         # In this case we want to upload the issues to GitHub Code Scanning
         continue-on-error: ${{ inputs.continue-on-error }}
-        uses: snyk/actions/docker@master
         env:
           # In order to use the Snyk Action you will need to have a Snyk API token.
           # More details in https://github.com/snyk/actions#getting-your-snyk-token
@@ -77,8 +77,8 @@ jobs:
         with:
           image: ${{ inputs.image }}
           args: ${{ inputs.severity }} ${{ inputs.dockerfile }} ${{ inputs.app-vulns }} --username=${{ secrets.registry-username }} --password=${{ secrets.registry-password }}
-      - 
-        name: Upload result to GitHub Code Scanning
+      
+      - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v1
         if: always() && inputs.upload-results
         with:

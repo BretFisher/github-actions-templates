@@ -2,6 +2,8 @@
 
 [![Lint Code Base](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-super-linter.yaml/badge.svg)](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-super-linter.yaml)
 [![Docker Build](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-docker-build.yaml/badge.svg)](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-docker-build.yaml)
+[![Snyk Scan](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-snyk-scan-image.yaml/badge.svg)](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-snyk-scan-image.yaml)
+[![Trivy Scan](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-trivy-scan-image.yaml/badge.svg)](https://github.com/BretFisher/github-actions-templates/actions/workflows/call-trivy-scan-image.yaml)
 
 See this repositories [`.github`](.github) directory for examples on linters, workflows, and dependabot.
 
