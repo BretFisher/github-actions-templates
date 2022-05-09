@@ -7,7 +7,7 @@
 
 See this repositories [`.github`](.github) directory for examples on linters, workflows, and dependabot.
 
-## Workflows
+## Examples
 
 - [`.github/dependabot.yml`](.github/depondabot.yml) will make PRs for version updates to your workflow steps.
 - [`.github/linters/`](.github/linters/) stores linter configs used by Super-Linter.
