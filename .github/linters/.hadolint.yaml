@@ -5,6 +5,8 @@
 # hadolint ignore=DL3018
 #RUN apk add --no-cache git
 
+failure-threshold: warning
+
 # or just ignore rules repo-wide
 ignored:
   - DL3003 #ignore that we use cd sometimes
