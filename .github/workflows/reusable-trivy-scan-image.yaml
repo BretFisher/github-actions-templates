@@ -54,7 +54,7 @@ jobs:
           echo "Image to scan: ${{ inputs.image }}"
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.5.1
+        uses: aquasecurity/trivy-action@0.6.1
         with:
           image-ref: ${{ inputs.image }}
           format: table # table, json, sarif
