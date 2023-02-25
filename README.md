@@ -25,12 +25,12 @@ I name workflows depending on how they are used:
 - `call-*.yaml` - this calls a reusable workflow that lives in other repositories or files with `uses: <github-path>`.
 - Any other workflows are just designed to run inside a repository directly.
 
-## This repository is part of my example repos on GitHub Actions
+## This repository is part of my examples on GitHub Actions
 
-- (you are here) [bretfisher/github-actions-templates](https://github.com/BretFisher/github-actions-templates) - Main repository
+- (you are here) [bretfisher/github-actions-templates](https://github.com/BretFisher/github-actions-templates) - Main reusable templates repository
 - [bretfisher/super-linter-workflow](https://github.com/BretFisher/super-linter-workflow) - Reusable linter workflow
 - [bretfisher/docker-build-workflow](https://github.com/BretFisher/docker-build-workflow)- Reusable docker build workflow
-- [bretfisher/allhands22](https://github.com/BretFisher/github-actions-templates) - Step by step example of a Docker workflow
+- [bretfisher/docker-ci-automation](https://github.com/BretFisher/docker-ci-automation) - Step by step video and example of a Docker CI workflow
 - [My full list of container examples and tools](https://github.com/bretfisher)
 
 ## More reading
