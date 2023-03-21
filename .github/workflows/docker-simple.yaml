@@ -1,0 +1,31 @@
+---
+name: Docker Build - Simple
+# simplest workflow possible
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-image:
+    name: Build Image
+    runs-on: ubuntu-latest
+    steps:        
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          # NOTE: github.actor is the username of the person who triggered the workflow
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Docker build
+        uses: docker/build-push-action@v4
+        with:
+          # only push image when we merge PRs or push to main branch
+          push: ${{ github.event_name != 'pull_request' }}
+          # use repo name as image name. 
+          # NOTE: may fail if caps are used in repo name
+          tags: ghcr.io/${{ github.repository }}
