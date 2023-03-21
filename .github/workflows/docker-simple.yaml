@@ -26,6 +26,5 @@ jobs:
         with:
           # only push image when we merge PRs or push to main branch
           push: ${{ github.event_name != 'pull_request' }}
-          # use repo name as image name. 
-          # NOTE: may fail if caps are used in repo name
-          tags: ghcr.io/${{ github.repository }}
+          # hardcoded for a single name/tags
+          tags: ghcr.io/bretfisher/github-actions-templates:simple
