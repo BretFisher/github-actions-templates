@@ -12,8 +12,9 @@ See this repositories [`.github`](.github) directory for examples on linters, wo
 - [`.github/dependabot.yml`](.github/dependabot.yml) will make PRs for version updates to your workflow steps.
 - [`.github/linters/`](.github/linters/) stores linter configs used by Super-Linter.
 - [`.github/workflows/call-super-linter.yaml`](.github/workflows/call-super-linter.yaml) is a workflow that calls Super-Linter, which I'm storing the full reusable workflow in [bretfisher/super-linter-workflow](https://github.com/BretFisher/super-linter-workflow).
-
 - [`.github/workflows/call-docker-build.yaml`](.github/workflows/call-docker-build.yaml) is a workflow that calls a Docker build advanced workflow, which I'm storing the full reusable workflow in [bretfisher/docker-build-workflow](bretfisher/docker-build-workflow).
+- [`.gitub/workflows/reusable-gitops-pr.yaml]()
+- [`.github/workflows/call-docker-build-promotion.yaml']()
 - [`.github/workflows/call-snyk-scan-image.yaml`](.github/workflows/call-snyk-scan-image.yaml) is a workflow that calls a [Snyk](https://github.com/snyk/cli) scan image at [`.github/workflows/reusable-snyk-scan-image.yaml`](.github/workflows/reusable-snyk-scan-image.yaml).
 - [`.github/workflows/call-trivy-scan-image.yaml`](.github/workflows/call-trivy-scan-image.yaml) is a workflow that calls a [Trivy](https://github.com/marketplace/actions/aqua-security-trivy) scan image at [`.github/workflows/reusable-trivy-scan-image.yaml`](.github/workflows/reusable-trivy-scan-image.yaml).
 

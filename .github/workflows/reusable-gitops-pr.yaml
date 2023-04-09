@@ -1,0 +1,102 @@
+---
+name: GitOps PR
+
+on:  
+  # REUSABLE WORKFLOW with INPUTS
+  # to keep this workflow simple, assumptions are made:
+    # - Checks out a repo with a kustomization.yaml file
+    # - Changes a image tag in the kustomization.yaml file
+    # - Creates a new branch and a PR with the change
+    # - Optionally notifies a Slack channel
+
+  workflow_call:
+    # allow reuse of this workflow in other repos
+    inputs:
+      repo:
+        description: Kustomize repo to checkout
+        required: true
+        type: string
+        # default: org/repo
+      image:
+        description: Image name to update in Kustomize
+        required: true
+        type: string
+        # default: ghcr.io/org/repo
+      tag:
+        description: New tag to use for the image
+        required: true
+        type: string
+      # relative path to the directory with the kustomization.yaml file
+      kustomize-path:
+        description: Path to the kustomization.yaml file
+        required: true
+        type: string
+        # default: environments/staging01
+      slack-channel-id:
+        description: Slack channel ID to post to
+        required: false
+        type: string
+        # default: C0123456789
+
+    secrets:
+      slack-token:
+        description: Docker Hub username
+        required: false
+      github-token:
+        description: Docker Hub token with write access to the repo and PRs
+        required: true
+
+    outputs:
+      pr-url:
+        description: "The newly created GitHub Pull Request URL"
+        value: ${{ jobs.gitops-pr.outputs.pr-url }}
+
+# permissions: GITHUB_TOKEN are better set by the **calling** workflow
+# but we'll set defaults here for reference
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idpermissions
+permissions: write-all
+
+jobs:
+  gitops-pr:
+
+    name: Update image tag
+
+    runs-on: ubuntu-latest
+
+    outputs:
+
+      pr-url: ${{ steps.cpr.outputs.pull-request-url }}
+
+    steps:
+          
+      - name: Checkout ${{ inputs.repo }}
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ inputs.repo }}
+          token: ${{ secrets.github-token }}
+
+      - name: Change image tag in kustomization.yaml
+        run: |
+          cd ${{ inputs.kustomize-path }}
+          kustomize edit set image "$(echo '${{ inputs.image }}' | tr '[:upper:]' '[:lower:]'):${{ inputs.tag }}"
+          cat kustomization.yaml
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.github-token }}
+          commit-message: "Update image for ${{ inputs.kustomize-path }}"
+          title: "${{ inputs.kustomize-path }} image update to: ${{ inputs.image }}:${{ inputs.tag }}"
+          body: "Update image tag of file `${{ inputs.kustomize-path }}/kustomization.yaml` to `${{ inputs.image }}:${{ inputs.tag }}`"
+          branch: "${{ inputs.tag }}"
+      
+      - name: Post to a Slack channel
+        id: slack
+        if: ${{ inputs.slack-channel-id }}
+        uses: slackapi/slack-github-action@v1
+        with:
+          channel-id: ${{ inputs.slack-channel-id }}
+          slack-message: "PR created ${{ steps.cpr.outputs.pull-request-url }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.slack-token }}
