@@ -1,0 +1,83 @@
+---
+# THIS IS NOT A TEMPLATE.
+# This is just for testing the repo itself.
+# This calls the reusable workflow from its local file path.
+name: Docker Build with Promotion
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - '.github/linters/**'
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - '.github/linters/**'
+
+# cancel any previously-started, yet still active runs of this workflow on the same branch
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions: { }
+
+jobs:
+
+  # run this job on every push to a PR
+  # it will push images to GHCR, but not Docker Hub
+  docker-build-pr:
+    name: Call Build on PR
+    if: github.event_name == 'pull_request'
+    uses: bretfisher/docker-build-workflow/.github/workflows/reusable-docker-build.yaml@main
+    with:
+      # DON'T login to or push to Docker Hub
+      dockerhub-enable: false
+      ghcr-enable: true
+      push: true
+      image-names: |
+        ghcr.io/${{ github.repository }}
+
+  # run this job on every push to the default branch (including merges and tags)
+  # it will push images to GHCR and DockerHub
+  # tags will also include ones like `stable-<date>-<sha>` and `latest`
+  docker-build-merge:
+    name: Call Build on Push
+    # this if is filtered to only the main branch push event (see events at top)
+    if: github.event_name == 'push'
+    uses: bretfisher/docker-build-workflow/.github/workflows/reusable-docker-build.yaml@main
+    secrets:
+      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+    with:  
+      dockerhub-enable: true
+      ghcr-enable: true
+      push: true
+      image-names: |
+        docker.io/${{ github.repository }}
+        ghcr.io/${{ github.repository }}
+
+  # this job runs after a push/merge to the default branch
+  # it will create a PR on a *different* repo that has
+  # Kustomize YAML, and will update the image tags to the new one
+  # This is an example of a "promotion" workflow where once a new image
+  # is created from the default_branch of an app, that a Kubernetes
+  # environment YAML needs to be updated as well.
+  # This will save humans the steps of looking up the new image tag
+  # and creating a new PR to update the Kustomize YAML.
+  # You could also change this to update a Helm chart values file.
+  gitops-pr:
+    name: GitOps PR
+    if: github.event_name == 'pull_request'
+    needs: docker-build-pr
+    uses: ./.github/workflows/reusable-gitops-pr.yaml
+    secrets:
+      github-token: ${{ secrets.GITOPS_TOKEN }}
+      slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    with:
+      repo: mostlydevops/wordsmith-k8s
+      kustomize-path: environments/staging01
+      image: ghcr.io/${{ github.repository }}
+      tag: ${{ needs.docker-build-pr.outputs.image-tag }}
+      slack-channel-id: ${{ vars.SLACK_CHANNEL_ID }}
