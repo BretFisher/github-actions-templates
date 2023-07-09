@@ -1,6 +1,8 @@
 ---
 name: Docker Build - Simple
 # simplest workflow possible
+# based on Docker's official GitHub Actions and their Docs:
+#   https://docs.docker.com/build/ci/github-actions/
 
 on:
   push:
