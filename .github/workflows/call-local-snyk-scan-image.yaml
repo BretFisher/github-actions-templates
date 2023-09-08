@@ -1,0 +1,62 @@
+name: Call Snyk
+
+on:
+
+  push:
+    branches: [main]
+
+  pull_request:
+
+jobs:
+  
+  scan:
+
+    name: Scan
+
+    permissions: read-all
+      
+    ### use Reusable Workflows to call my workflow remotely
+    ### https://docs.github.com/en/actions/learn-github-actions/reusing-workflows
+    ### you can also call workflows from inside the same repo via file path
+    
+    #FIXME: customize uri to point to your own linter repository
+    uses: bretfisher/github-actions-templates/.github/workflows/reusable-snyk-scan-image.yaml@main
+
+    secrets:
+    
+      ### REQUIRED
+      ### registry auth
+      registry-username: ${{ github.actor }}
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
+
+      ### REQUIRED
+      ### In order to use the Snyk Action you will need to have a Snyk API token.
+      ### More details in https://github.com/snyk/actions#getting-your-snyk-token
+      ### or you can signup for free at https://snyk.io/login
+      snyk-token: ${{ secrets.SNYK_TOKEN }}
+
+    with:
+      
+      ### REQUIRED
+      ### image to scan
+      image: 'ghcr.io/bretfisher/github-actions-templates:latest'
+
+      ### defaults to true, which doesn't fail job if CVEs are found
+      ### set to false to fail (blocking) if CVEs (of your severities) are found
+      # continue-on-error: true
+      
+      ### --severity-threshold=<low|medium|high|critical>
+      ### default is high:
+      # severity: --severity-threshold=high
+      
+      ### Dockerfile location, for best results. Set to '' to disable.
+      ### default is:
+      # dockerfile: --file=Dockerfile
+
+      ### Scan app dependencies as well. Set to '' to disable.
+      ### default is true:
+      # app-vulns: --app-vulns
+      
+      ### Upload scan results to GitHub Security tab
+      ### defaults to false
+      # upload-results: false
