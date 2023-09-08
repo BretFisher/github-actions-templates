@@ -8,13 +8,15 @@ These workflow examples comprise three parts:
 - `templates/call-*.yaml` - these are the "calling" templates that you would copy to all your code and IaC repositories. Each of their jobs has the special `uses: <github-path>` to point to the reusable workflow.
 - `.github/workflows/call-local*.yaml` - For testing. Calls a local workflow in the same directory. ProTip: Make tests for your reusable workflows! Either in the same repository as this one shows, or from a separate repository full of tests. You'll thank me later.
 
+> ⚠️ **DO NOT call this workflow directly**, rather, use it as a template repository and fork it for your own reusable workflow. I might change this workflow at anytime, based on new GHA features or learnings, and your calling workflow might break. ⚠️
+
 ## Examples
 
 - [`.github/dependabot.yml`](.github/dependabot.yml) will make PRs for version updates to your Actions *and* Dockerfiles.
 - [`.github/linters/`](.github/linters/) stores linter configs used by Super-Linter. ProTip: symlink these to the preferred location to use the same linters locally.
 - [`templates/call-super-linter.yaml`](templates/call-super-linter.yaml) is a workflow that calls Super-Linter, which I'm storing the full reusable workflow in [bretfisher/super-linter-workflow](https://github.com/BretFisher/super-linter-workflow).
 - [`templates/call-docker-build.yaml`](templates/call-docker-build.yaml) is a workflow that calls a Docker build (awesomesauce!), which I'm storing the full reusable workflow in [bretfisher/docker-build-workflow](bretfisher/docker-build-workflow).
-- [`templates/call-docker-build-promotion.yaml`](templates/call-docker-build-promotion.yaml) is an advanced workflow that calls a build workflow on PR, and then on merge it will call that workflow with different values and [also creates a GitOps-style PR](.gitub/workflows/reusable-gitops-pr.yaml) to deploy the new image to a Kubernetes cluster.
+- [`templates/call-docker-build-promotion.yaml`](templates/call-docker-build-promotion.yaml) is an advanced workflow that calls a build workflow on PR, and then on merge it will call that workflow with different values and [also creates a GitOps-style PR](.github/workflows/reusable-gitops-pr.yaml) to deploy the new image to a Kubernetes cluster.
 - [`templates/call-snyk-scan-image.yaml`](templates/call-snyk-scan-image.yaml) is a workflow that calls a [Snyk](https://github.com/snyk/cli) scan [in this repository](.github/workflows/reusable-snyk-scan-image.yaml).
 - [`templates/call-trivy-scan-image.yaml`](templates/call-trivy-scan-image.yaml) is a workflow that calls a reusable [Trivy](https://github.com/marketplace/actions/aqua-security-trivy) scan [in this repository](.github/workflows/reusable-trivy-scan-image.yaml).
 
@@ -23,7 +25,7 @@ These workflow examples comprise three parts:
 - (you are here) [bretfisher/github-actions-templates](https://github.com/BretFisher/github-actions-templates) - Main reusable templates repository
 - [bretfisher/super-linter-workflow](https://github.com/BretFisher/super-linter-workflow) - Reusable linter workflow
 - [bretfisher/docker-build-workflow](https://github.com/BretFisher/docker-build-workflow)- Reusable docker build workflow
-- [bretfisher/[docker-ci-automation](https://github.com/BretFisher/docker-ci-automation) - Step-by-step video and example of a Docker CI workflow
+- [bretfisher/docker-ci-automation](https://github.com/BretFisher/docker-ci-automation) - Step-by-step video and example of a Docker CI workflow
 - [My full list of container examples and tools](https://github.com/bretfisher)
 
 ## More reading
