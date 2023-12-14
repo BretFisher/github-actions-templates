@@ -79,7 +79,7 @@ jobs:
           args: ${{ inputs.severity }} ${{ inputs.dockerfile }} ${{ inputs.app-vulns }} --username=${{ secrets.registry-username }} --password=${{ secrets.registry-password }}
       
       - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always() && inputs.upload-results
         with:
           sarif_file: snyk.sarif
