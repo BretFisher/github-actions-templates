@@ -70,7 +70,7 @@ jobs:
     steps:
           
       - name: Checkout ${{ inputs.repo }}
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: ${{ inputs.repo }}
           token: ${{ secrets.github-token }}
