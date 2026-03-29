@@ -17,8 +17,7 @@ These workflow examples comprise three parts:
 - [`templates/call-super-linter.yaml`](templates/call-super-linter.yaml) is a workflow that calls Super-Linter, which I'm storing the full reusable workflow in [bretfisher/super-linter-workflow](https://github.com/BretFisher/super-linter-workflow).
 - [`templates/call-docker-build.yaml`](templates/call-docker-build.yaml) is a workflow that calls a Docker build (awesomesauce!), which I'm storing the full reusable workflow in [bretfisher/docker-build-workflow](bretfisher/docker-build-workflow).
 - [`templates/call-docker-build-promotion.yaml`](templates/call-docker-build-promotion.yaml) is an advanced workflow that calls a build workflow on PR, and then on merge it will call that workflow with different values and [also creates a GitOps-style PR](.github/workflows/reusable-gitops-pr.yaml) to deploy the new image to a Kubernetes cluster.
-- [`templates/call-snyk-scan-image.yaml`](templates/call-snyk-scan-image.yaml) is a workflow that calls a [Snyk](https://github.com/snyk/cli) scan [in this repository](.github/workflows/reusable-snyk-scan-image.yaml).
-- [`templates/call-trivy-scan-image.yaml`](templates/call-trivy-scan-image.yaml) is a workflow that calls a reusable [Trivy](https://github.com/marketplace/actions/aqua-security-trivy) scan [in this repository](.github/workflows/reusable-trivy-scan-image.yaml).
+- [`templates/call-grype-scan-image.yaml`](templates/call-grype-scan-image.yaml) is a workflow that calls a reusable [Grype](https://github.com/anchore/scan-action) scan [in this repository](.github/workflows/reusable-grype-scan-image.yaml).
 
 ## This repository is part of my examples on GitHub Actions
 

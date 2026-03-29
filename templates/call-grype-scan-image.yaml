@@ -1,4 +1,4 @@
-name: Call Trivy
+name: Call Grype
 
 on:
 
@@ -20,7 +20,7 @@ jobs:
     ### you can also call workflows from inside the same repo via file path
     
     #FIXME: customize uri to point to your own linter repository
-    uses: bretfisher/github-actions-templates/.github/workflows/reusable-trivy-scan-image.yaml@main
+    uses: bretfisher/github-actions-templates/.github/workflows/reusable-grype-scan-image.yaml@main
 
     secrets:
     
@@ -34,17 +34,17 @@ jobs:
       ### image to scan
       image: 'ghcr.io/bretfisher/github-actions-templates:latest'
 
-      ### defaults to 0, which doesn't fail job if CVEs are found
-      ### set to 1 to fail (blocking) if CVEs (of your severities) are found
-      # exit-code: 0
+      ### defaults to false, which doesn't fail job if CVEs are found
+      ### set to true to fail (blocking) if CVEs are found at or above your severity cutoff
+      # fail-build: false
       
-      ### Comma delimited list of severities to scan for UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
-      ### default is HIGH,CRITICAL
-      # severity: HIGH,CRITICAL
+      ### Minimum severity to fail on: negligible, low, medium, high, critical
+      ### default is high
+      # severity-cutoff: high
 
-      ### Ignore unpatched/unfixed vulnerabilities
+      ### Only report vulnerabilities with fixes available
       ### defaults to true
-      # ignore-unfixed: true
+      # only-fixed: true
       
       ### Upload scan results to GitHub Security tab
       ### defaults to false

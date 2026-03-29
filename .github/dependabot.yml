@@ -9,6 +9,8 @@ updates:
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
+    cooldown:
+      default-days: 7
     schedule:
       interval: "daily"
 
@@ -20,6 +22,8 @@ updates:
   # https://github.com/dependabot/dependabot-core/issues/2178
   - package-ecosystem: "docker"
     directory: "/"
+    cooldown:
+      default-days: 7
     schedule:
       interval: "weekly"
     commit-message:

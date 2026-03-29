@@ -1,0 +1,53 @@
+name: Call Grype
+
+on:
+
+  push:
+    branches: [main]
+
+  pull_request:
+
+jobs:
+  
+  scan:
+
+    name: Scan
+
+    permissions:
+      contents: read
+      security-events: write
+      
+    ### use Reusable Workflows to call my workflow remotely
+    ### https://docs.github.com/en/actions/learn-github-actions/reusing-workflows
+    ### you can also call workflows from inside the same repo via file path
+    
+    #FIXME: customize uri to point to your own linter repository
+    uses: bretfisher/github-actions-templates/.github/workflows/reusable-grype-scan-image.yaml@main # zizmor: ignore[unpinned-uses] Teaching repo: caller workflows intentionally reference reusable workflows by branch for readability. Pin normal action steps inside the reusable workflow itself.
+
+    secrets:
+    
+      ### registry auth
+      registry-username: ${{ github.actor }}
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
+
+    with:
+      
+      ### REQUIRED
+      ### image to scan
+      image: 'ghcr.io/bretfisher/github-actions-templates:latest'
+
+      ### defaults to false, which doesn't fail job if CVEs are found
+      ### set to true to fail (blocking) if CVEs are found at or above your severity cutoff
+      # fail-build: false
+      
+      ### Minimum severity to fail on: negligible, low, medium, high, critical
+      ### default is high
+      # severity-cutoff: high
+
+      ### Only report vulnerabilities with fixes available
+      ### defaults to true
+      # only-fixed: true
+      
+      ### Upload scan results to GitHub Security tab
+      ### defaults to false
+      # upload-results: false

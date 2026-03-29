@@ -70,22 +70,27 @@ jobs:
     steps:
           
       - name: Checkout ${{ inputs.repo }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
         with:
           repository: ${{ inputs.repo }}
-          token: ${{ secrets.github-token }}
+          token: ${{ secrets.github-token }} # zizmor: ignore[secrets-outside-env] This reusable workflow is designed to accept a caller-provided workflow_call secret rather than require a preconfigured GitHub Environment.
+          persist-credentials: false
 
       - name: Change image tag in kustomization.yaml
+        working-directory: ${{ inputs.kustomize-path }}
+        env:
+          INPUT_IMAGE: ${{ inputs.image }}
+          INPUT_TAG: ${{ inputs.tag }}
         run: |
-          cd ${{ inputs.kustomize-path }}
-          kustomize edit set image "$(echo '${{ inputs.image }}' | tr '[:upper:]' '[:lower:]'):${{ inputs.tag }}"
+          image_name="$(printf '%s' "$INPUT_IMAGE" | tr '[:upper:]' '[:lower:]')"
+          kustomize edit set image "${image_name}:${INPUT_TAG}"
           cat kustomization.yaml
 
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 #v8.1.0
         with:
-          token: ${{ secrets.github-token }}
+          token: ${{ secrets.github-token }} # zizmor: ignore[secrets-outside-env] This reusable workflow is designed to accept a caller-provided workflow_call secret rather than require a preconfigured GitHub Environment.
           commit-message: "Update image for ${{ inputs.kustomize-path }}"
           title: "${{ inputs.kustomize-path }} image update to: ${{ inputs.image }}:${{ inputs.tag }}"
           body: "Update image tag of file `${{ inputs.kustomize-path }}/kustomization.yaml` to `${{ inputs.image }}:${{ inputs.tag }}`"
@@ -94,9 +99,9 @@ jobs:
       - name: Post to a Slack channel
         id: slack
         if: ${{ inputs.slack-channel-id }}
-        uses: slackapi/slack-github-action@v3
+        uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 #v3.0.1
         with:
           channel-id: ${{ inputs.slack-channel-id }}
           slack-message: "PR created ${{ steps.cpr.outputs.pull-request-url }}"
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.slack-token }}
+          SLACK_BOT_TOKEN: ${{ secrets.slack-token }} # zizmor: ignore[secrets-outside-env] This reusable workflow is designed to accept a caller-provided workflow_call secret rather than require a preconfigured GitHub Environment.
