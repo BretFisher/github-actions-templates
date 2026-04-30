@@ -99,7 +99,7 @@ jobs:
       - name: Post to a Slack channel
         id: slack
         if: ${{ inputs.slack-channel-id }}
-        uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 #v3.0.1
+        uses: slackapi/slack-github-action@03ea5433c137af7c0495bc0cad1af10403fc800c #v3.0.2
         with:
           channel-id: ${{ inputs.slack-channel-id }}
           slack-message: "PR created ${{ steps.cpr.outputs.pull-request-url }}"
